@@ -1,0 +1,23 @@
+<div id="modal-wrapper" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <form 
+          {% if item_type == 'folder' %}
+            hx-put="/api/v1/folders/{{ item_id }}"
+          {% else %}
+            hx-put="/api/v1/assets/{{ item_id }}"
+          {% endif %}
+          hx-target="#browser-content" hx-swap="innerHTML" class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+        
+        <h3 class="text-xl font-bold mb-4">Ubah Nama</h3>
+        
+        <input type="text" 
+               name="{{ 'title' if item_type == 'asset' else 'name' }}" 
+               required value="{{ current_name }}"
+               class="w-full p-2 border rounded mb-4" autofocus>
+
+        <div class="flex justify-end space-x-3">
+            <button type="button" hx-post="/close-modal" hx-target="#modal-container"
+                    class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">Batal</button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Simpan</button>
+        </div>
+    </form>
+</div>

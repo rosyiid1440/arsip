@@ -1,0 +1,9 @@
+# requirements.txt
+fastapi
+uvicorn[standard]
+sqlalchemy
+psycopg2-binary  # Driver untuk PostgreSQL
+pydantic-settings
+python-multipart # Untuk handle file uploads
+Pillow
+jinja2

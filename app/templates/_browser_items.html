@@ -1,0 +1,49 @@
+<div id="action-buttons-wrapper" hx-swap-oob="true" class="relative"
+     x-data="{ open: false }" 
+     @click.outside="open = false">
+    
+    <button @click="open = !open" class="bg-blue-500 text-white font-semibold px-4 py-2 rounded-lg shadow hover:bg-blue-600 transition-colors flex items-center">
+        <span>+ Baru</span>
+        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    </button>
+
+    <div x-show="open" x-transition 
+         class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-20 origin-top-right">
+        <a href="#" 
+           hx-get="/ui/new-folder-form?parent_id={{ folder.id if folder else '' }}"
+           hx-target="#modal-container" @click="open = false"
+           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Folder Baru</a>
+        <a href="#"
+           hx-get="/ui/new-upload-form?folder_id={{ folder.id if folder else '' }}"
+           hx-target="#modal-container" @click="open = false"
+           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Upload File</a>
+    </div>
+</div>
+
+
+{% for item in items %}
+  {% if item.__class__.__name__ == 'Folder' %}
+    <div data-item-id="{{ item.id }}" data-item-type="folder" 
+         hx-get="/browse/{{ item.id }}" hx-target="#browser-content" hx-swap="innerHTML"
+         class="cursor-pointer p-4 border rounded-lg flex items-center space-x-3 hover:bg-gray-100">
+         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+        </svg>
+        <span class="font-medium">{{ item.name }}</span>
+    </div>
+
+  {% elif item.__class__.__name__ == 'Asset' %}
+    <div data-item-id="{{ item.id }}" data-item-type="asset" 
+         hx-get="/assets/{{ item.id }}/details" hx-target="#modal-container" hx-swap="innerHTML"
+         class="cursor-pointer p-2 border rounded-lg text-center hover:bg-gray-100">
+        {% if item.thumbnail_path %}
+          <img src="/static/{{ item.thumbnail_path }}" alt="{{ item.title }}" class="w-full h-32 object-cover rounded-md mb-2">
+        {% else %}
+          <div class="w-full h-32 bg-gray-200 flex items-center justify-center rounded-md mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+          </div>
+        {% endif %}
+        <span class="font-medium text-sm truncate block">{{ item.title }}</span>
+    </div>
+  {% endif %}
+{% endfor %}

@@ -1,0 +1,22 @@
+<div id="modal-wrapper" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <form hx-post="/create-folder" hx-target="#browser-content" hx-swap="innerHTML" 
+          class="bg-white p-6 rounded-lg shadow-xl w-full max-w-sm">
+        
+        <h3 class="text-xl font-bold mb-4">Buat Folder Baru</h3>
+        
+        <input type="text" name="name" required placeholder="Nama Folder"
+               class="w-full p-2 border rounded mb-4" autofocus>
+        
+        <input type="hidden" name="parent_id" value="{{ parent_id if parent_id is not none else '' }}">
+
+        <div class="flex justify-end space-x-3">
+            <button type="button" hx-post="/close-modal" hx-target="#modal-container"
+                    class="bg-gray-200 px-4 py-2 rounded-lg hover:bg-gray-300">
+                Batal
+            </button>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+                Buat
+            </button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,52 @@
+<div x-data="{}" 
+     x-init="$nextTick(() => { 
+        let menu = $el.querySelector('div');
+        if (window.innerHeight < menu.offsetHeight + {{ y }}) {
+            menu.style.top = ({{ y }} - menu.offsetHeight) + 'px';
+        } else {
+            menu.style.top = {{ y }} + 'px';
+        }
+        if (window.innerWidth < menu.offsetWidth + {{ x }}) {
+            menu.style.left = ({{ x }} - menu.offsetWidth) + 'px';
+        } else {
+            menu.style.left = {{ x }} + 'px';
+        }
+     })"
+     class="fixed inset-0 z-40"
+     @click.self="document.getElementById('context-menu-container').innerHTML = ''">
+
+    <div class="fixed bg-white rounded-md shadow-lg py-1 w-48 z-50">
+        <a href="#" 
+           hx-get="/ui/rename-form?item_id={{ item_id }}&item_type={{ item_type }}"
+           hx-target="#modal-container"
+           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+           Rename
+        </a>
+        
+        {% if item_type == 'asset' %}
+        <a href="/api/v1/assets/{{ item_id }}/download" download
+           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Download</a>
+        {% endif %}
+        
+        <div class="border-t my-1"></div>
+
+        {% if item_type == 'folder' %}
+            <a href="#"
+               hx-delete="/api/v1/folders/{{ item_id }}"
+               hx-target="#browser-content" hx-swap="innerHTML" hx-confirm="Anda yakin ingin menghapus folder ini? Semua isinya akan ikut terhapus."
+               class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+               Delete Folder
+            </a>
+        {% elif item_type == 'asset' %}
+            <a href="#"
+               hx-delete="/api/v1/assets/{{ item_id }}"
+               hx-target="#browser-content" hx-swap="innerHTML" hx-confirm="Anda yakin ingin menghapus aset ini?"
+               class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+               Delete Asset
+            </a>
+        {% endif %}
+        <div class="border-t my-1"></div>
+        <p class="px-4 py-2 text-xs text-gray-400">Type: {{ item_type }}</p>
+
+    </div>
+</div>

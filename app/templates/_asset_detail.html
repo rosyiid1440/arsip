@@ -1,0 +1,29 @@
+<div id="modal-wrapper" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="bg-white p-6 rounded-lg shadow-xl w-full max-w-4xl relative">
+        <button 
+            hx-post="/close-modal" 
+            hx-target="#modal-wrapper" 
+            hx-swap="outerHTML" 
+            class="absolute top-2 right-4 text-3xl font-bold text-gray-500 hover:text-gray-800">&times;
+        </button>
+
+        <h2 class="text-2xl font-bold mb-4">{{ asset.title }}</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2">
+                <img src="/static/{{ asset.file_path }}" alt="{{ asset.title }}" class="w-full rounded-lg object-contain max-h-[70vh]">
+            </div>
+            <div>
+                <h3 class="font-bold text-lg mb-2">Metadata</h3>
+                <div class="space-y-2 text-sm">
+                    <p><strong class="w-24 inline-block">Event:</strong> {{ asset.event_name or 'N/A' }}</p>
+                    <p><strong class="w-24 inline-block">Fotografer:</strong> {{ asset.photographer or 'N/A' }}</p>
+                    <p><strong class="w-24 inline-block">Tanggal:</strong> {{ asset.capture_date.strftime('%d %B %Y') if asset.capture_date else 'N/A' }}</p>
+                    <p><strong class="w-24 inline-block">Deskripsi:</strong> {{ asset.description or 'Tidak ada deskripsi.' }}</p>
+                    <p><strong class="w-24 inline-block">Tags:</strong> {{ asset.tags or 'N/A' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
